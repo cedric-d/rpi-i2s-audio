@@ -25,23 +25,23 @@
 static void device_release_callback(struct device *dev) { /* do nothing */ };
 
 static struct asoc_simple_card_info snd_rpi_i2s_card_info = {
-	.card = "snd_rpi_i2s_card", // -> snd_soc_card.name
-	.name = "i2s_codec_link", // -> snd_soc_dai_link.name
-	.codec = "snd-soc-dummy", // "dmic-codec", // -> snd_soc_dai_link.codec_name
+	.card = "snd_rpi_i2s_card",		// -> snd_soc_card.name
+	.name = "i2s_codec_link",		// -> snd_soc_dai_link.name
+	.codec = "snd-soc-dummy",		// -> snd_soc_dai_link.codec_name
 	.platform = "3f203000.i2s",
 	.daifmt = SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_NB_NF | SND_SOC_DAIFMT_CBS_CFS,
 	.cpu_dai = {
-		.name = "3f203000.i2s", // -> snd_soc_dai_link.cpu_dai_name
+		.name = "3f203000.i2s",		// -> snd_soc_dai_link.cpu_dai_name
 		.sysclk = 0
 	},
 	.codec_dai = {
-		.name = "snd-soc-dummy-dai", //"dmic-codec", // -> snd_soc_dai_link.codec_dai_name
+		.name = "snd-soc-dummy-dai",	// -> snd_soc_dai_link.codec_dai_name
 		.sysclk = 0
 	},
 };
 
 static struct platform_device snd_rpi_i2s_card_device = {
-	.name = "rpi-i2s-audio",
+	.name = "asoc-simple-card",
 	.id = 0,
 	.num_resources = 0,
 	.dev = {
@@ -53,11 +53,11 @@ static struct platform_device snd_rpi_i2s_card_device = {
 
 static int rpi_i2s_audio_init(void)
 {
-	const char *dmaengine = "bcm2835-dma";
+	const char *basemodule = "snd-soc-bcm2835-i2s";
 	int err;
 
-	err = request_module(dmaengine);
-	pr_notice("Request module load '%s': %d\n",dmaengine, err);
+	err = request_module(basemodule);
+	pr_notice("Request module load '%s': %d\n", basemodule, err);
 	if (err)
 		goto fail_module;
 
